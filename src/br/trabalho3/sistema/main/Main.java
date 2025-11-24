@@ -58,7 +58,7 @@ public class Main {
         System.out.println("  SISTEMA DE ACADEMIA");
         System.out.println("============================================");
         System.out.println("Instituição: FAESA");
-        System.out.println("Disciplina: LPOA");
+        System.out.println("Disciplina: LPOO");
         System.out.println("============================================\n");
 
         System.out.println("Iniciando sistema...\n");

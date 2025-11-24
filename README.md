@@ -1,6 +1,6 @@
 # Sistema de Academia
 
-Trabalho da disciplina de Linguagem de Programação Orientada a Objetos (LPOA).
+Trabalho da disciplina de Linguagem de Programação Orientada a Objetos (LPOO).
 
 ## Sobre
 
@@ -136,4 +136,4 @@ O sistema já vem com alguns dados de exemplo nos arquivos CSV para facilitar os
 
 ---
 
-**Observação**: Este é um projeto acadêmico desenvolvido para a disciplina LPOA.
+**Observação**: Este é um projeto acadêmico desenvolvido para a disciplina LPOO.
