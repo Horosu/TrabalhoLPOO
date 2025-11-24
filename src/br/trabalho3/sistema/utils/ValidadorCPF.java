@@ -6,13 +6,7 @@ package br.trabalho3.sistema.utils;
  * Classe utilitária com métodos estáticos
  * Não precisa ser instanciada, todos os métodos são estáticos.
  *
- * O algoritmo de validação do CPF:
- * 1. Remove caracteres não numéricos (pontos, traços)
- * 2. Verifica se tem 11 dígitos
- * 3. Rejeita CPFs com todos os dígitos iguais (ex: 111.111.111-11)
- * 4. Calcula o primeiro dígito verificador
- * 5. Calcula o segundo dígito verificador
- * 6. Compara os dígitos calculados com os informados
+ * A validação do CPF verifica apenas se possui 11 dígitos numéricos.
  *
  */
 public class ValidadorCPF {
@@ -26,10 +20,10 @@ public class ValidadorCPF {
     }
 
     /**
-     * Valida um CPF usando o algoritmo oficial de validação.
+     * Valida um CPF verificando apenas se possui 11 dígitos.
      *
      * @param cpf CPF a ser validado (pode conter pontos e traços ou apenas números)
-     * @return true se o CPF é válido, false caso contrário
+     * @return true se o CPF tem 11 dígitos, false caso contrário
      */
     public static boolean validarCPF(String cpf) {
         // Verifica se o CPF é nulo ou vazio
@@ -41,55 +35,7 @@ public class ValidadorCPF {
         cpf = cpf.replaceAll("[^0-9]", "");
 
         // Verifica se tem exatamente 11 dígitos
-        if (cpf.length() != 11) {
-            return false;
-        }
-
-        // Rejeita CPFs conhecidos como inválidos (todos os dígitos iguais)
-        // Ex: 000.000.000-00, 111.111.111-11, ..., 999.999.999-99
-        if (cpf.matches("(\\d)\\1{10}")) {
-            return false;
-        }
-
-        try {
-            // Calcula o primeiro dígito verificador
-            int soma = 0;
-            for (int i = 0; i < 9; i++) {
-                // Multiplica cada dígito por (10 - posição)
-                // Posição 0: multiplica por 10
-                // Posição 1: multiplica por 9
-                // ... até posição 8: multiplica por 2
-                soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
-            }
-            int primeiroDigitoVerificador = 11 - (soma % 11);
-            // Se o resultado for 10 ou 11, o dígito verificador é 0
-            if (primeiroDigitoVerificador >= 10) {
-                primeiroDigitoVerificador = 0;
-            }
-
-            // Verifica se o primeiro dígito calculado confere com o informado
-            if (primeiroDigitoVerificador != Character.getNumericValue(cpf.charAt(9))) {
-                return false;
-            }
-
-            // Calcula o segundo dígito verificador
-            soma = 0;
-            for (int i = 0; i < 10; i++) {
-                // Agora multiplica por (11 - posição)
-                soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
-            }
-            int segundoDigitoVerificador = 11 - (soma % 11);
-            if (segundoDigitoVerificador >= 10) {
-                segundoDigitoVerificador = 0;
-            }
-
-            // Verifica se o segundo dígito calculado confere com o informado
-            return segundoDigitoVerificador == Character.getNumericValue(cpf.charAt(10));
-
-        } catch (Exception e) {
-            // Se ocorrer qualquer erro durante o processamento, considera inválido
-            return false;
-        }
+        return cpf.length() == 11;
     }
 
     /**

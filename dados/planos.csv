@@ -1,6 +1,2 @@
 id,nome,precoBase,duracao,tipo
-P001,Mensal Comum,100.00,30,COMUM
-P002,Mensal Premium,100.00,30,PREMIUM
-P003,Mensal Estudante,100.00,30,ESTUDANTE
-P004,Trimestral Comum,90.00,90,COMUM
-P005,Anual Premium,80.00,365,PREMIUM
+01,GYM PASS,100,00,30,ESTUDANTE

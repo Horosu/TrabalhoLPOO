@@ -1,1 +1,3 @@
 id,idMatricula,formaPagamento,valor,dataPagamento,status,detalhesPagamento
+PAG001,MAT001,PIX,50,00,24/11/2025,CONFIRMADO,PIX
+PAG002,MAT001,CARTAO,20,00,24/11/2025,CONFIRMADO,CARTAO:DEBITO
