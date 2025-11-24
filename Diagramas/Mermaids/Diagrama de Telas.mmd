@@ -1,0 +1,152 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontSize: 14px
+---
+flowchart TB
+    %% ======================================================
+    %% Diagrama de Telas - Sistema de Academia (ATUALIZADO)
+    %% ======================================================
+    %% Autores: Gabriely Barbosa, Guilherme Bispo, Micael Ribeiro
+    %% Data: Novembro/2024
+    %% Versão: 2.0 (Atualizada)
+    %% ======================================================
+
+    START([🚀 Iniciar Sistema]):::start
+    
+    A[🏠 Tela Principal<br/>Menu do Sistema]:::main
+    
+    %% =======================
+    %% Módulo de Cadastros
+    %% =======================
+    subgraph CAD[📋 MÓDULO DE CADASTROS]
+        direction TB
+        B1[🧍 Cadastro de Aluno<br/>---<br/>- Incluir<br/>- Editar<br/>- Excluir<br/>- Listar]:::cad
+        B2[🏋️ Cadastro de Instrutor<br/>---<br/>- Incluir<br/>- Editar<br/>- Excluir<br/>- Listar]:::cad
+        B3[📦 Cadastro de Plano<br/>---<br/>- Comum<br/>- Premium<br/>- Estudante]:::cad
+    end
+    
+    %% =======================
+    %% Módulo Financeiro
+    %% =======================
+    subgraph FIN[💳 MÓDULO FINANCEIRO]
+        direction TB
+        E1[📝 Realizar Matrícula<br/>---<br/>- Selecionar Aluno<br/>- Escolher Plano<br/>- Definir Vigência]:::fin
+        E2[💰 Registrar Pagamento<br/>---<br/>- PIX<br/>- Cartão<br/>- Dinheiro]:::fin
+        E3[📆 Histórico de Pagamentos<br/>---<br/>- Confirmados<br/>- Pendentes<br/>- Estornados]:::fin
+    end
+    
+    %% =======================
+    %% Módulo de Relatórios
+    %% =======================
+    subgraph REL[📊 MÓDULO DE RELATÓRIOS E CONSULTAS]
+        direction TB
+        F1[🔍 Consulta de Alunos<br/>---<br/>- Ativos<br/>- Inativos<br/>- Por Plano]:::rel
+        F2[📈 Relatórios Financeiros<br/>---<br/>- Receitas<br/>- Pendências<br/>- Inadimplência]:::rel
+        F3[📤 Exportar Relatório<br/>---<br/>- CSV<br/>- Impressão]:::rel
+    end
+    
+    %% =======================
+    %% Fluxo Principal
+    %% =======================
+    START --> A
+    
+    A -->|Acessar<br/>Cadastros| CAD
+    A -->|Acessar<br/>Financeiro| FIN
+    A -->|Acessar<br/>Relatórios| REL
+    
+    %% Fluxos de Cadastros
+    A --> B1
+    A --> B2
+    A --> B3
+    
+    B1 -->|Salvar / Cancelar| A
+    B2 -->|Salvar / Cancelar| A
+    B3 -->|Salvar / Cancelar| A
+    
+    %% Fluxos Financeiros
+    A --> E1
+    E1 -->|Confirmar Matrícula| E2
+    E2 -->|Registrar Pagamento| E3
+    E3 -->|Consultar Histórico| A
+    
+    %% Fluxos de Relatórios
+    A --> F1
+    F1 -->|Gerar Relatório| F2
+    F2 -->|Exportar| F3
+    F3 -->|Voltar| A
+    
+    %% Navegação entre módulos
+    E1 -.->|Precisa<br/>cadastrar aluno?| B1
+    E1 -.->|Precisa<br/>cadastrar plano?| B3
+    
+    %% =======================
+    %% Validações e Exceções
+    %% =======================
+    subgraph VAL[⚠️ VALIDAÇÕES]
+        direction LR
+        V1[❌ CPF Inválido]:::error
+        V2[❌ Email Inválido]:::error
+        V3[❌ Dados Incompletos]:::error
+        V4[❌ Aluno Não Encontrado]:::error
+    end
+    
+    B1 -.->|Validação| VAL
+    B2 -.->|Validação| VAL
+    E1 -.->|Validação| VAL
+    
+    %% =======================
+    %% Confirmações
+    %% =======================
+    subgraph CONF[✅ CONFIRMAÇÕES]
+        direction LR
+        C1[✅ Aluno Cadastrado]:::success
+        C2[✅ Matrícula Realizada]:::success
+        C3[✅ Pagamento Confirmado]:::success
+        C4[✅ Relatório Gerado]:::success
+    end
+    
+    B1 -.->|Sucesso| CONF
+    E1 -.->|Sucesso| CONF
+    E2 -.->|Sucesso| CONF
+    F3 -.->|Sucesso| CONF
+    
+    %% =======================
+    %% Legenda
+    %% =======================
+    subgraph LEGENDA[📘 LEGENDA DE CORES E SÍMBOLOS]
+        direction LR
+        L1[🔵 Azul: Tela Principal]:::main
+        L2[🟢 Verde: Cadastros]:::cad
+        L3[🟠 Laranja: Financeiro]:::fin
+        L4[⚫ Cinza: Relatórios]:::rel
+        L5[🔴 Vermelho: Erros]:::error
+        L6[🟢 Verde Claro: Sucesso]:::success
+        L7[⚪ Branco: Início]:::start
+    end
+    
+    %% =======================
+    %% Estilos
+    %% =======================
+    classDef main fill:#1e88e5,stroke:#0d47a1,color:#fff,stroke-width:3px,font-weight:bold
+    classDef cad fill:#43a047,stroke:#1b5e20,color:#fff,stroke-width:2px
+    classDef fin fill:#fb8c00,stroke:#e65100,color:#fff,stroke-width:2px
+    classDef rel fill:#757575,stroke:#424242,color:#fff,stroke-width:2px
+    classDef error fill:#e53935,stroke:#b71c1c,color:#fff,stroke-width:2px
+    classDef success fill:#66bb6a,stroke:#2e7d32,color:#fff,stroke-width:2px
+    classDef start fill:#fff,stroke:#000,color:#000,stroke-width:3px
+    
+    class A main
+    class B1,B2,B3 cad
+    class E1,E2,E3 fin
+    class F1,F2,F3 rel
+    class V1,V2,V3,V4 error
+    class C1,C2,C3,C4 success
+    class START start
+    class L1 main
+    class L2,L6 success
+    class L3 fin
+    class L4 rel
+    class L5 error
+    class L7 start

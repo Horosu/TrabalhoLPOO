@@ -1,0 +1,231 @@
+flowchart TD
+    %% ======================================================
+    %% Diagrama Funcional - Sistema de Academia (ATUALIZADO)
+    %% ======================================================
+    %% Autores: Gabriely Barbosa, Guilherme Bispo, Micael Ribeiro
+    %% Data: Novembro/2024
+    %% Versão: 2.0 (Atualizada)
+    %% ======================================================
+    %% Demonstra o fluxo de dados e interação entre camadas
+    %% ======================================================
+
+    %% =======================
+    %% Camada de Apresentação
+    %% =======================
+    U[👤 Usuário<br/>Operador do Sistema]:::user
+    
+    subgraph UI[🪟 CAMADA DE APRESENTAÇÃO - Interface Swing]
+        direction TB
+        UI1[Tela Principal]
+        UI2[Telas de Cadastro]
+        UI3[Telas Financeiras]
+        UI4[Telas de Relatórios]
+    end
+    
+    %% =======================
+    %% Camada de Controle
+    %% =======================
+    subgraph CTRL[🎛️ CAMADA DE CONTROLE - Lógica de Negócio]
+        direction TB
+        CTRL1[Academia<br/>Singleton]
+        CTRL2[Validadores<br/>CPF, Email]
+        CTRL3[Gerador de<br/>Relatórios]
+    end
+    
+    %% =======================
+    %% Camada de Modelo
+    %% =======================
+    subgraph MODEL[📦 CAMADA DE MODELO - Entidades]
+        direction LR
+        M1[Pessoa<br/>Aluno<br/>Instrutor]
+        M2[Plano<br/>PlanoComum<br/>PlanoPremium<br/>PlanoEstudante]
+        M3[Matricula<br/>StatusMatricula]
+        M4[Pagamento<br/>FormaPagamento<br/>StatusPagamento]
+    end
+    
+    %% =======================
+    %% Camada de Persistência
+    %% =======================
+    subgraph PERSIST[💾 CAMADA DE PERSISTÊNCIA - Repositories]
+        direction LR
+        P1[AlunoRepository]
+        P2[InstrutorRepository]
+        P3[PlanoRepository]
+        P4[MatriculaRepository]
+        P5[PagamentoRepository]
+    end
+    
+    %% =======================
+    %% Armazenamento
+    %% =======================
+    subgraph STORAGE[(🗄️ ARMAZENAMENTO - Arquivos CSV)]
+        direction LR
+        S1[(alunos.csv)]
+        S2[(instrutores.csv)]
+        S3[(planos.csv)]
+        S4[(matriculas.csv)]
+        S5[(pagamentos.csv)]
+    end
+    
+    %% =======================
+    %% Tratamento de Exceções
+    %% =======================
+    subgraph EXC[⚠️ EXCEÇÕES]
+        direction TB
+        EX1[UsuarioNaoEncontradoException]
+        EX2[MatriculaInvalidaException]
+        EX3[PagamentoNaoEncontradoException]
+        EX4[DadosInvalidosException]
+    end
+    
+    %% =======================
+    %% Feedback
+    %% =======================
+    subgraph FEED[📢 FEEDBACK]
+        direction TB
+        F1[✅ JOptionPane<br/>Sucesso]
+        F2[❌ JOptionPane<br/>Erro]
+        F3[ℹ️ JOptionPane<br/>Informação]
+    end
+    
+    %% =======================
+    %% Fluxo de Dados - Cadastro de Aluno
+    %% =======================
+    U -->|1. Preenche formulário| UI2
+    UI2 -->|2. Envia dados| CTRL1
+    CTRL1 -->|3. Valida| CTRL2
+    CTRL2 -.->|Dados inválidos| EX4
+    CTRL2 -->|Dados válidos| M1
+    M1 -->|4. Cria objeto Aluno| CTRL1
+    CTRL1 -->|5. Salva| P1
+    P1 -->|6. Persiste| S1
+    S1 -->|7. Confirmação| P1
+    P1 -->|8. Retorna sucesso| CTRL1
+    CTRL1 -->|9. Notifica| UI2
+    UI2 -->|10. Exibe| F1
+    F1 -->|11. Visualiza| U
+    
+    %% =======================
+    %% Fluxo de Dados - Realizar Matrícula
+    %% =======================
+    U -->|a. Seleciona aluno e plano| UI3
+    UI3 -->|b. Busca aluno| CTRL1
+    CTRL1 -->|c. Consulta| P1
+    P1 -->|d. Lê| S1
+    S1 -.->|Não encontrado| EX1
+    S1 -->|Aluno encontrado| P1
+    P1 -->|e. Retorna aluno| CTRL1
+    
+    CTRL1 -->|f. Busca plano| P3
+    P3 -->|g. Lê| S3
+    S3 -->|Plano encontrado| P3
+    P3 -->|h. Retorna plano| CTRL1
+    
+    CTRL1 -->|i. Cria matrícula| M3
+    M3 -->|j. Calcula valores| M2
+    M2 -->|k. Retorna preço| M3
+    M3 -->|l. Matrícula criada| CTRL1
+    CTRL1 -->|m. Salva| P4
+    P4 -->|n. Persiste| S4
+    S4 -->|o. Confirmação| CTRL1
+    CTRL1 -->|p. Notifica| F1
+    
+    %% =======================
+    %% Fluxo de Dados - Registrar Pagamento
+    %% =======================
+    UI3 -->|i. Registra pagamento| CTRL1
+    CTRL1 -->|ii. Valida forma pagamento| M4
+    M4 -.->|Forma inválida| EX3
+    M4 -->|Forma válida| CTRL1
+    CTRL1 -->|iii. Cria pagamento| M4
+    M4 -->|iv. Salva| P5
+    P5 -->|v. Persiste| S5
+    S5 -->|vi. Confirmação| CTRL1
+    CTRL1 -->|vii. Notifica| F1
+    
+    %% =======================
+    %% Fluxo de Dados - Gerar Relatório
+    %% =======================
+    U -->|1. Solicita relatório| UI4
+    UI4 -->|2. Requisita dados| CTRL1
+    CTRL1 -->|3. Busca dados| PERSIST
+    PERSIST -->|4. Lê arquivos| STORAGE
+    STORAGE -->|5. Retorna dados| PERSIST
+    PERSIST -->|6. Objetos criados| CTRL1
+    CTRL1 -->|7. Processa| CTRL3
+    CTRL3 -->|8. Gera relatório| CTRL1
+    CTRL1 -->|9. Retorna relatório| UI4
+    UI4 -->|10. Exibe ou exporta| U
+    
+    %% =======================
+    %% Tratamento de Exceções
+    %% =======================
+    EXC -.->|Captura erro| CTRL1
+    CTRL1 -.->|Envia mensagem| F2
+    F2 -.->|Exibe erro| U
+    
+    %% =======================
+    %% Legenda
+    %% =======================
+    subgraph LEGEND[📘 LEGENDA]
+        direction LR
+        LEG1[→ Fluxo Normal]
+        LEG2[-.-> Fluxo de Exceção]
+        LEG3[🔵 Usuário]
+        LEG4[🟢 Interface]
+        LEG5[🟡 Controle]
+        LEG6[🟠 Modelo]
+        LEG7[🟣 Persistência]
+        LEG8[⚫ Armazenamento]
+        LEG9[🔴 Exceções]
+    end
+    
+    %% =======================
+    %% Estilos
+    %% =======================
+    classDef user fill:#2196f3,stroke:#1565c0,color:#fff,stroke-width:3px
+    classDef ui fill:#4caf50,stroke:#2e7d32,color:#fff,stroke-width:2px
+    classDef ctrl fill:#ffc107,stroke:#f57c00,color:#000,stroke-width:2px
+    classDef model fill:#ff9800,stroke:#e65100,color:#fff,stroke-width:2px
+    classDef persist fill:#9c27b0,stroke:#6a1b9a,color:#fff,stroke-width:2px
+    classDef storage fill:#607d8b,stroke:#37474f,color:#fff,stroke-width:2px
+    classDef exception fill:#f44336,stroke:#c62828,color:#fff,stroke-width:2px
+    classDef feedback fill:#66bb6a,stroke:#2e7d32,color:#fff,stroke-width:2px
+    
+    %% Aplicando estilos (cada classe individualmente)
+    class U user
+    class UI ui
+    class UI1 ui
+    class UI2 ui
+    class UI3 ui
+    class UI4 ui
+    class CTRL ctrl
+    class CTRL1 ctrl
+    class CTRL2 ctrl
+    class CTRL3 ctrl
+    class MODEL model
+    class M1 model
+    class M2 model
+    class M3 model
+    class M4 model
+    class PERSIST persist
+    class P1 persist
+    class P2 persist
+    class P3 persist
+    class P4 persist
+    class P5 persist
+    class STORAGE storage
+    class S1 storage
+    class S2 storage
+    class S3 storage
+    class S4 storage
+    class S5 storage
+    class EXC exception
+    class EX1 exception
+    class EX2 exception
+    class EX3 exception
+    class EX4 exception
+    class FEED feedback
+    class F1 feedback
+    class F2 feedback
+    class F3 feedback
