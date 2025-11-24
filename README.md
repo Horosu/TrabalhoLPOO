@@ -72,8 +72,8 @@ Todos os atributos das classes são privados e acessados através de getters e s
 ### Abstração
 Quatro classes abstratas foram criadas: Pessoa, Plano, FormaPagamento e CSVRepository.
 
-### Singleton
-A classe Academia utiliza o padrão Singleton para garantir que existe apenas uma instância dela no sistema.
+### Instância Única da Academia
+A classe Academia garante que só existe uma academia no sistema inteiro. Isso é feito através de um construtor privado e um método getInstance() que sempre retorna a mesma instância. Assim, todas as partes do sistema trabalham com a mesma academia, evitando problemas de dados duplicados ou inconsistentes.
 
 ### Exceções Customizadas
 Foram criadas 4 exceções:

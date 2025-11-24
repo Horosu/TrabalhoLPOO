@@ -13,8 +13,7 @@ import java.awt.*;
 public class TelaPrincipal extends JFrame {
 
     /**
-     * Instância da Academia (Singleton).
-     * Central de todas as operações do sistema.
+     * Academia do sistema - ponto central de todas as operações.
      */
     private Academia academia;
 
@@ -44,7 +43,7 @@ public class TelaPrincipal extends JFrame {
      * Inicializa todos os componentes e configura a interface.
      */
     public TelaPrincipal() {
-        // Obtém a instância única da Academia (padrão Singleton)
+        // Busca a academia do sistema
         this.academia = Academia.getInstance();
 
         // Inicializa os repositórios

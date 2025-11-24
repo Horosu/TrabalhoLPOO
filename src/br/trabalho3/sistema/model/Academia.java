@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class Academia {
 
     /**
-     * Instância única da classe Academia (padrão Singleton).
-     * SINGLETON PATTERN
+     * Guarda a única instância da academia no sistema.
+     * Garante que todos acessam a mesma academia.
      */
     private static Academia instancia;
 
@@ -59,12 +59,10 @@ public class Academia {
     private int contadorPagamentos;
 
     /**
-     * Construtor privado para implementar o padrão Singleton.
-     * SINGLETON PATTERN
+     * Construtor privado - garante que só existe uma academia.
      *
-     * O construtor é privado para que nenhuma outra classe possa
-     * instanciar Academia diretamente. A única forma de obter uma
-     * instância é através do método getInstance().
+     * O construtor é privado para impedir que outras classes criem
+     * novas academias. Para acessar a academia, use getInstance().
      */
     private Academia() {
         // Inicializa todas as coleções
@@ -78,14 +76,12 @@ public class Academia {
     }
 
     /**
-     * Obtém a instância única da Academia.
+     * Retorna a academia do sistema.
      *
-     * SINGLETON PATTERN
-     * Este método garante que apenas uma instância da classe Academia
-     * existe em toda a aplicação. Se ainda não existe, cria uma nova.
-     * Se já existe, retorna a existente.
+     * Se ainda não foi criada, cria uma nova. Caso contrário,
+     * retorna a academia existente. Assim, todos usam a mesma.
      *
-     * @return Instância única de Academia
+     * @return A academia do sistema
      */
     public static Academia getInstance() {
         if (instancia == null) {
